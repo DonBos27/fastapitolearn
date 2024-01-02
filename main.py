@@ -29,5 +29,10 @@ def root():
     return {"Hello : World"} 
 
 @app.get("/api/v1/users")
-async def root():
+async def fetch_users():
     return db,
+
+@app.post("/api/v1/users")
+async def register_users(user:User):
+    db.append(user)
+    return {"id" : user.id}
