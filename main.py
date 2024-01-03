@@ -62,7 +62,7 @@ async def register_users(userUpdate:UpdateUser, user_id:UUID):
                 user.roles = userUpdate.roles
             raise HTTPException(
                 status_code=200,
-                detail="success"
+                detail="successful "
             )
     raise HTTPException(
         status_code=400,
