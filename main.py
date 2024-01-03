@@ -1,7 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from typing import List
 from uuid import uuid4,UUID
-from model import User, Gender, Roles
+from model import User, Gender, Roles, UpdateUser
 
 app = FastAPI()
 
@@ -43,3 +43,29 @@ async def remove_users(user_id:UUID):
         if user.id == user_id:
             db.remove(user)
             return
+    raise HTTPException(
+        status_code=404,
+        detail= f"user with id {user_id} does not exist."
+    )
+
+@app.put("/api/v1/users/{user_id}")
+async def register_users(userUpdate:UpdateUser, user_id:UUID):
+    for user in db:
+        if user.id == user_id:
+            if userUpdate.first_name is not None:
+                user.first_name = userUpdate.first_name
+            if userUpdate.last_name is not None:
+                user.last_name = userUpdate.last_name
+            if userUpdate.name is not None:
+                user.name = userUpdate.name
+            if userUpdate.roles is not None:
+                user.roles = userUpdate.roles
+            raise HTTPException(
+                status_code=200,
+                detail="success"
+            )
+    raise HTTPException(
+        status_code=400,
+        detail= f"user with id {user_id} does not exist."
+    )
+            
